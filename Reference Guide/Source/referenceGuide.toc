@@ -1,0 +1,33 @@
+\contentsline {section}{\numberline {1}Introduction}{4}
+\contentsline {section}{\numberline {2}Development}{7}
+\contentsline {subsection}{\numberline {2.1}Programming Environment}{7}
+\contentsline {subsection}{\numberline {2.2}Application Program Interfaces}{7}
+\contentsline {subsubsection}{\numberline {2.2.1}Java}{7}
+\contentsline {subsubsection}{\numberline {2.2.2}Java Swing}{7}
+\contentsline {subsubsection}{\numberline {2.2.3}JUnit}{7}
+\contentsline {subsubsection}{\numberline {2.2.4}TradeKing}{7}
+\contentsline {subsubsection}{\numberline {2.2.5}Codec}{8}
+\contentsline {subsubsection}{\numberline {2.2.6}Xerces}{8}
+\contentsline {subsubsection}{\numberline {2.2.7}Java Database Connectivity}{8}
+\contentsline {subsubsection}{\numberline {2.2.8}Twitter4j}{9}
+\contentsline {subsubsection}{\numberline {2.2.9}Twitter}{9}
+\contentsline {subsubsection}{\numberline {2.2.10}Document Preparation}{10}
+\contentsline {section}{\numberline {3}Operation}{11}
+\contentsline {subsection}{\numberline {3.1}Database Initialization}{11}
+\contentsline {subsection}{\numberline {3.2}Starting \texttt {TKWatch+}}{12}
+\contentsline {subsection}{\numberline {3.3}User Interface}{12}
+\contentsline {subsection}{\numberline {3.4}Exercising \texttt {TKWatch+}}{13}
+\contentsline {subsubsection}{\numberline {3.4.1}Adding an Instrument}{15}
+\contentsline {subsubsection}{\numberline {3.4.2}Updating an Instrument}{17}
+\contentsline {subsubsection}{\numberline {3.4.3}Deleting an Instrument}{18}
+\contentsline {section}{\numberline {4}Issues}{21}
+\contentsline {subsection}{\numberline {4.1}Testing}{21}
+\contentsline {subsection}{\numberline {4.2}Executable}{21}
+\contentsline {subsection}{\numberline {4.3}Default Watch List Only}{21}
+\contentsline {subsection}{\numberline {4.4}Database}{21}
+\contentsline {subsection}{\numberline {4.5}XML}{22}
+\contentsline {subsection}{\numberline {4.6}To-Do List}{22}
+\contentsline {section}{\numberline {5}About Us}{23}
+\contentsline {subsection}{\numberline {5.1}Paul Donovan}{23}
+\contentsline {subsection}{\numberline {5.2}Paul Kelly}{24}
+\contentsline {subsection}{\numberline {5.3}Michael Radovich}{25}

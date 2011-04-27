@@ -1,0 +1,540 @@
+% %
+% Technical Reference Guide for TKWatch+
+%
+\documentclass[twoside]{refart}
+\usepackage{makeidx}
+\usepackage{ifthen}
+\usepackage{epsf}
+\usepackage{url}
+
+% To put figures where they occur
+\renewcommand{\floatpagefraction}{0.0}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.1}
+
+\def\bs{\char'134 } % backslash in \tt font.
+\newcommand{\ie}{i.\,e.,}
+\newcommand{\eg}{e.\,g..}
+\newcommand{\forceblankpage}{\newpage\ \newpage}
+\newcommand{\tkw}{\texttt{TKWatch+}}
+\newcommand{\docname}{Reference Guide\ }
+\setlength{\parskip}{9pt}
+\raggedbottom
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
+
+\title{\docname for \tkw}
+\author{Paul Donovan, Paul Kelly, and Michael Radovich \\
+Loyola University Maryland \\
+April 30, 2011}
+
+\date{}
+\emergencystretch1em  %
+
+\pagestyle{myfootings}
+\markboth{\docname for \textrm{\tkw}}%
+         {\docname for \textrm{\tkw}}
+
+\makeindex 
+
+\setcounter{tocdepth}{2}
+
+\begin{document}
+
+\bibliographystyle{plain}
+
+\maketitle
+
+\begin{abstract}
+This documents the program \tkw, submitted by us as an entry into a contest sponsored by TradeKing and Loyola University Maryland.  It is not a user manual, nor is it a tutorial on the various application program interfaces (API's) and tools we used.  Instead we document how to set up and run \tkw.  This document was delivered along with all the Java source code, Javadocs for that code, and other resources required.  These materials are available at~\cite{github}.  We gratefully acknowledge the role of Dr.~Paul Tallon in setting up the contest and the major programming and documentation assistance provided by Dr.~George Wright.
+\end{abstract}
+\vfill
+\begin{figure}[hbt]
+\epsfxsize=2.8in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{tkwBigIcon.eps}}
+\end{center}
+\end{figure}
+
+\forceblankpage
+
+\tableofcontents
+
+\newpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+\tkw~is a program for managing watch lists on TradeKing\index{TradeKing}, an on-line brokerage firm for self-directed investors.\cite{tkfaq}  The program has three functions.
+\begin{enumerate}
+  \item It stores watch list item particulars (stock market symbol, cost basis reference, quantity reference, and extended free text notation) in a relational database.
+  \item It supports adding, updating, and deleting watch list items on the user's TradeKing account.
+  \item At the user's option, it tweets additions and deletions to the user's Twitter account.
+\end{enumerate}
+This guide, along with accompanying \seealso{Code, Javadocs at \cite{github}}source code and Javadocs, explains the set-up, development, and operation of \tkw.
+
+The target audience\index{Audience} for this document is a technically adept programmer.  By that we mean an individual who:
+\begin{itemize}
+  \item Has administrator privileges on the development platform;
+  \item Can define environment variables for the host operating system;
+  \item Can edit the \texttt{CLASSPATH} for the host operating system;
+  \item Can operate in the \texttt{Eclipse}\cite{eclipse}\index{Eclipse} integrated development environment (IDE) or something similar;
+  \item Can manage user accounts on the host relational database; and
+  \item Can operate at the command line prompt.
+\end{itemize}
+
+This guide is {\em not\/} a tutorial on any of the tools used during development.  Instead we try to spell out the steps used to develop, set up, and run \tkw~in the following sections.
+\begin{description}
+  \item[Development] We discuss the hardware platform, software platform, development environment, and document preparation program we used.  This includes configuration of all API's used.
+  \item[Operation] We discuss initializing the database, navigating the user interface, and performing the basic functionality of adding, updating, and deleting a watch list item.
+  \item[Issues] We enumerate all the remaining problems, limitations, areas for improvement, and the list of items that should be addressed in subsequent versions.
+  \item[About Us] We close with a short biographical sketch about each of us.
+\end{description}
+
+\label{intro}
+A major feature of this guide is cross-referencing.  A \seealso{Section~\ref{intro}, page~\pageref{intro}}cross-reference, such as the self-referential one to the left, appears as an arrow pointing to the referenced material.  The cross-reference may refer to parts of this guide, to Javadocs, or to source code.
+
+References to documents, books, and web sites appear as numbers in square brackets.  The numbered reference can be found in the References section on page~\pageref{refs}.  The index is on page~\pageref{index}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\forceblankpage
+\section{Development}
+Legacy constraints determined the architecture of \tkw.  We were limited to the technology provided by Loyola University Maryland and our faculty advisors.  While we tried for portability, we failed to achieve it in some areas.  We note those areas below.
+
+\subsection{Programming Environment}
+\index{Programming Environment}
+All development, testing, and operation was done exclusively on Loyola's Lenovo PC's running Windows Vista or Windows 7.  We used two versions of \texttt{Eclipse}\index{Eclipse}: Pulsar for Mobile Java Developers, build id: 20100218-1602, and Helios, Version: 3.6.1, Build id: M20100909-0800.\cite{eclipse}
+
+\subsection{Application Program Interfaces}
+We use nine API's in this project.  We discuss them below in the order we began use them in the project.
+\subsubsection{Java}
+\index{Java API}
+Since we programmed \tkw~in Java, it could be taken for granted that we used the Java API.\cite{java}  To be specific, we used Java development kit \texttt{jdk1.6.0\_23} with Java runtime environment \texttt{jre6} installed.  The operating system environment must have the appropriate path and class path variables.  These variables must refer to the appropriate Java executables and jar files.
+
+\subsubsection{Java Swing}
+\index{Java Swing}
+\tkw~is a client-based, stand-alone program which uses the Java Swing windowing graphical user interface (GUI).\cite{swing}  In our code, we use Swing's \seealso{\texttt{Tkwatch.java}}``pluggable look-and-feel'' capability to emulate Windows.  This is, of course, a portability issue.\index{Portability}  
+
+\subsubsection{JUnit}
+\index{JUnit API}
+For unit testing, we used \seealso{\texttt{WatchlistItemTest.java}}\texttt{JUnit}.\cite{junit}  Specifically, we used the \texttt{JUnit3} API that comes packaged with \texttt{Eclipse}. It is also available as an open-source project.\cite{junitorg}.  If you use another IDE, you will need to be sure that \texttt{junit.jar} is on the class path\index{Class Path}.
+
+\subsubsection{TradeKing}
+\index{TradeKing API}
+The TradeKing API, currently in beta, allows programmatic interaction with your TradeKing account.\cite{tkreference}  Access to this API is available only to TradeKing account holders and must be requested from TradeKing.  Upon request, you will receive a terms-of-use\index{Terms of Use Agreement} agreement.  After signing and returning this agreement and upon approval by TradeKing, you will receive API \index{Credentials, TradeKing}credentials.  
+
+Rather than hard-code our credentials into the Java source code, we used a Java \seealso{\texttt{tradeking.properties}}properties\index{Properties, TradeKing} file to load the TradeKing credentials into a Java \texttt{Properties} object.  The \texttt{tradeking.properties} file must appear in the directory holding the \tkw~package \texttt{tkwatch}.  It must contain the following entries.
+\begin{description}
+  \item[\texttt{TRADEKING\_ACCOUNT}]  The eight-digit number of the user's TradeKing account.  This is only necessary for making API calls that involve the account number.
+  \item[\texttt{TRADEKING\_APP\_KEY}] The key for the \tkw~application.  This currently seems to common to all beta applications.\cite{tkforum}
+  \item[\texttt{TRADEKING\_URL}]  The universal resource locator (URL) for accessing the TradeKing API.  This too is supplied by TradeKing upon approval for API access.
+  \item[\texttt{TRADEKING\_USER\_KEY}] This is the key associated with the user's TradeKing account login.
+  \item[\texttt{TRADEKING\_USER\_SECRET}] This key is used to sign each request made against the TradeKing API.
+\end{description}
+Note that all the credentials in the accompanying file \texttt{trade\-king.pro\-per\-ties} are replaced with asterisks for security.  You must replace the asterisks with your own credentials to run \tkw.
+
+\subsubsection{Codec}
+\index{Codec API}
+The TradeKing API requires the \texttt{OAuth} protocol for signing each request.  Our code handles signature via \seealso{\texttt{Utilities.java}}function \texttt{Utilities.generateSignature()}, adapted from \cite{tkreference}.  This requires the Apache Commons Codec API for Base64 encoding/decoding.\cite{codec}  The jar file \texttt{commons-codec-1.5.jar} must be on the class path\index{Class Path}.
+
+\subsubsection{Xerces}
+\index{Xerces}\index{XML}
+The TradeKing API requests accept and return XML data.  In some of our \seealso{\texttt{Utilities.java}}code we use routines adapted from \cite{vohra06} to convert XML data to and from Domain Object Model (DOM) documents.  These routines require the Apache \texttt{Xerces} API.\cite{xerces}  The jar files \texttt{xercesImpl.jar} and \texttt{xml-apis.jar} must be on the class path\index{Class Path}.
+
+\subsubsection{Java Database Connectivity}\label{databaseConfiguration}
+\index{Java Database Connectivity (JDBC)}\index{JDBC}
+\tkw~stores enhanced watch list item data in a relational database, Microsoft's SQL Server in this implementation.  Although this compromises \index{Portability}portability, it is a legacy constraint.  We used SQL Server 2005 Management Studio, version 9.00.3042.00.
+
+We used Microsoft's version 1.2 JDBC driver for database connectivity through the standard JDBC API's available in the Java API.\cite{msjdbc}  The jar file \texttt{sqljdbc.jar} must be on the class path\index{Class Path}.
+
+Rather than hard-code our database credentials into the Java source code, we used a Java \seealso{\texttt{database.properties}}properties\index{Properties, Database} file to load the database credentials into a Java \texttt{Properties} object.  The \texttt{database.properties} file must appear in the directory holding the \tkw~package \texttt{tkwatch}.  It must contain the following entries.
+\begin{description}
+  \item[\texttt{DATABASE\_NAME}] The URL of the JDBC data source for the watch list SQL Server database.  In our implementation the URL is \texttt{jdbc:sql\-ser\-ver://lo\-cal\-host;port=1433;DatabaseName=watchlist}\index{JDBC}.  Address \texttt{localhost} can be replace with the Internet Protocol (IP) address of a remote server.  Port 1433 is the default port for SQL Server.  The default database name is \texttt{watchlist}.  This default database name shouldn't be changed, because it's assumed when the database is \seealso{Section~\ref{database}, page~\pageref{database}}configured.
+  \item[\texttt{DATABASE\_DRIVER}]  The JDBC driver for SQL Server connectivity.  For Microsoft's version 1.2 JDBC driver, this is \texttt{com.microsoft.sqlserver.jdbc.SQL\-Ser\-verDri\-ver}\index{JDBC}.  This is a \index{Portability}portability issue.
+  \item[\texttt{DATABASE\_MASTER}] The URL of the SQL Server master database, \texttt{jdbc:sql\-ser\-ver://lo\-cal\-host;port=1433;databaseName=master}, assuming a default SQL Server installation.  This is necessary when the database is \seealso{Section~\ref{database}, page~\pageref{database}}configured.  This is a \index{Portability}portability issue.
+  \item[\texttt{UID}] The user ID for database access.  For our implementation this is \texttt{watchlist\_user}.   This is necessary when the database is \seealso{Section~\ref{database}, page~\pageref{database}}configured.
+  \item[\texttt{PASSWORD}]  The password for database access.  For our implementation this is \texttt{g!st3rS1}.   This is necessary when the database is \seealso{Section~\ref{database}, page~\pageref{database}}configured.
+\end{description}
+
+\subsubsection{Twitter4j}
+\index{Twitter4j API} 
+A feature of \tkw~is that it tweets watch list item adds and deletes to the user's Twitter account.  Yusuke Yamamoto\index{Yamamoto, Yusuke} has created  \texttt{twitter4J}, an unofficial library to support interaction of Java programs with the Twitter API.\cite{yamamoto}  The jar file \texttt{twitter4j-core-2.2.1.jar} must be on the class path\index{Class Path}.
+
+\subsubsection{Twitter}
+\index{Twitter API}
+Like TradeKing, Twitter has released an API that exposes the Twitter service to programmatic access.\cite{makice, twitterapi}  Also as with TradeKing, Twitter requires \index{Credentials, Twitter}credentials for authentication.  Obtaining complete Twitter credentials takes several steps.
+
+The first step is registering an application.  This is done by clicking the ``Register a new app'' button on Twitter's ``Twitter applications'' page.\cite{twitterapps} Successful registration furnishes the following credentials and URL's.  Rather than hard-code our Twitter credentials into the Java source code, we used a Java \seealso{\texttt{twitter4j.properties}}properties\index{Properties, Database} file to load the Twitter credentials into a Java \texttt{Properties} object.  The \texttt{twitter4j.properties} file must appear in the directory holding the \tkw~package \texttt{tkwatch}.  It must contain the following entries.
+\begin{description}
+  \item[\texttt{oauth.consumerKey}] The Twitter registration process returns this both as the ``API key'' and as the ``Consumer key.'' it needs to be entered into \texttt{twitter4j.properties} only once, as the consumer key.
+  \item[\texttt{oauth.consumerSecret}]  The Twitter registration process returns this as the ``Consumer secret.''
+  \item[\texttt{TWITTER\_REQUEST\_TOKEN\_URL}] The Twitter registration process returns this as the ``Request token URL,'' \url{https://api.twitter.com/oauth/request_token}.
+  \item[\texttt{TWITTER\_AUTHORIZE\_URL}] The Twitter registration process returns this as the ``Authorize URL,'' \url{https://api.twitter.com/oauth/authorize}.
+\end{description}
+
+Once the application is registered, the user still needs to obtain two more credentials.  These can be obtained by running \seealso{\texttt{GetAccessTokens.java}}\texttt{GetAccessTokens.java}.  This is a stand-alone program that can be run either at the command line or in \texttt{Eclipse}.  It's easier to run in \texttt{Eclipse}, because it will be easier to cut-and-paste---which can't be done at the command line---than to type long keys.  The following is the console output from a run of \texttt{GetAccessTokens.java}.
+
+{\footnotesize
+\begin{verbatim}
+Open the following URL and grant access to your account:
+http://api.twitter.com/oauth/authorize?oauth_token=
+   ***************************************
+Enter the PIN(if available) or just hit enter.[PIN]:*******
+Access tokens for *********
+oauth.accessToken=**************************************************
+oauth.accessTokenSecret=******************************************
+\end{verbatim}}
+
+These last two items must be added to the \texttt{twitter4j.properties} file as follows.\index{Credentials, Twitter}
+\begin{description}
+  \item[\texttt{oauth.accessToken}] The access token used by the \texttt{OAuth} protocol to access the Twitter API.
+  \item[\texttt{oauth.accessTokenSecret}]  The access token secret used by the \texttt{OAuth} protocol to access the Twitter API.
+\end{description}
+
+Note that all the credentials both above and in the accompanying file \texttt{twit\-ter4j.pro\-per\-ties} are replaced with asterisks for security.  You must replace the asterisks with your own credentials to run \tkw.
+
+\subsubsection{Document Preparation}
+\index{Document Preparation}\index{\LaTeX}\index{PC\TeX}
+In order to provide the extensive cross-listing, referencing, and indexing required for this document, we used \LaTeX,the document preparation system developed by Leslie Lamport\index{Lamport, Leslie}.\cite{lamport,latexproject}.  This document was prepared using the \texttt{refman} document class.\cite{williams}  The execution itself was handled via PC\TeX version 6.1, a commercially available version of \LaTeX marketed by \index{Personal \Tex}Personal \TeX.\cite{pctex}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Operation}
+\index{Operation}
+\subsection{Database Initialization}
+\index{Database Initialization}\label{database}
+Before \tkw~can be run, the database must be initialized.  Before this can be done, a SQL Server administrator must create a login for user \seealso{Section~\ref{databaseConfiguration}, page~\pageref{databaseConfiguration}}\texttt{watchlist\_user}, password \texttt{g!st3rS1}.  Then the administrator must set server roles for \texttt{watchlist\_user} as shown in Figure~\ref{dbServerRoles}.
+\begin{figure}[hbt]
+\epsfxsize=4in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{dbUserServerRoles.eps}}
+\end{center}
+\caption{Server Roles for \texttt{watchlist\_user}\label{dbServerRoles}\index{Database User Server Roles}}
+\end{figure}
+The watch list user account must be able to create and initialize the watch list database.
+
+Database initialization is done by running the \seealso{\texttt{Database.java}}\texttt{Database.main()}.  This can be done either in \texttt{Eclipse} or at the command line.  To run from the command line, change directories into the directory containing the \texttt{tkwatch} package, the three properties files, and the graphics files \texttt{poweredbyT4J.gif}, \texttt{tkwIcon.jpg}, \texttt{twitterColor.gif}, and \texttt{twitterGray.gif}.  The command is \texttt{java tkwatch.Database}.  The dialog box in Figure~\ref{databaseInit} will appear.   
+\begin{figure}[hbt]
+%\epsfxsize=3.5in
+\epsfysize=.7in
+\begin{center}
+\mbox{\epsffile{databaseInit.eps}}
+\end{center}
+\caption{Database Initialization Option Dialog\label{databaseInit}}
+\end{figure}
+ You should select ``Yes.''  You should then see the dialog box in Figure~\ref{initialized}.
+\begin{figure}[hbt]
+%\epsfxsize=2in
+\epsfysize=.7in
+\begin{center}
+\mbox{\epsffile{initialized.eps}}
+\end{center}
+\caption{Database Initialized Message Dialog\label{initialized}}
+\end{figure}
+The database is now set up, empty, and ready to accept watch list items.
+
+\subsection{Starting \tkw}\label{start}
+\index{Starting \tkw}
+As currently configured, \tkw~can be run either within \texttt{Eclipse} or at the command line. To run from the command line, change directories into the directory containing the \texttt{tkwatch} package, the three properties files, and the graphics files \texttt{poweredbyT4J.gif}, \texttt{tkwIcon.jpg}, \texttt{twitterColor.gif}, and \texttt{twitterGray.gif}.  The command is \texttt{java tkwatch.Tkwatch}.
+
+\subsection{User Interface}
+\index{User Interface}
+When \tkw~starts, the user interface appears as in Figure~\ref{tkwgui}.
+\begin{figure}[hbt]
+\epsfxsize=3.5in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{tkwgui.eps}}
+\end{center}
+\caption{\tkw~User Interface\label{tkwgui}}
+\end{figure}
+\seealso{\texttt{WatchlistPanel.java}}The user interface has eight features that either provide information to the user or allow the user to take some action.
+\begin{description}
+  \item[Symbol List] \index{Symbol List}The vertically-oriented area on the left, labeled ``Symbol,'' is the list of market symbols for each instrument currently on the watch list.  Since the database was just initialized, it is empty.  When there is one or more symbol on the list, one of them is selected, initially the first.  Data for that instrument appear in the next three interface elements.
+  \item[Cost Basis] \index{Cost Basis}  We are not sure what this data element is.  According to \cite{tkreference} the cost basis element allows ``\dots the user to associate values with the watchlist which assist in providing a portfolio value for the client.''  This element does not appear in TradeKing account displays of the watch list.  It does appear in responses to the TradeKing API \texttt{/user/watchlists} \texttt{get} command.\cite{tkreference}
+  \item[Quantity] \index{Quantity}   We are not sure what this data element is.  According to \cite{tkreference} the quantity element allows ``\dots the user to associate values with the watchlist which assist in providing a portfolio value for the client.''  This element does not appear in TradeKing account displays of the watch list.  It does appear in responses to the TradeKing API \texttt{/user/watchlists} \texttt{get} command.\cite{tkreference}
+  \item[Notation] \index{Notation}  This field allows the user to create, read, update, and delete free text about the selected instrument.  The current \seealso{\texttt{Database.java}}implementation limits it to 4096 characters.
+  \item[Add Button] \index{Add Button}\index{Button, Add} This button allows the user to add an instrument to the watch list. \seealso{Section~\ref{exercising}, page~\pageref{add}}Operation of this button is discussed  below.  If the ``Tweet Adds \& Deletes'' check box is checked, the program tweets about the addition to the user's Twitter account.
+  \item[Update Button] \index{Update Button}\index{Button, Update} This button allows the user to update an instrument in the watch list, i.e., change cost basis, quantity, notation, but not symbol. \seealso{Section~\ref{update}, page~\pageref{update}}Operation of this button is discussed below.
+  \item[Delete Button] \index{Delete Button}\index{Button, Delete}  This button allows the user to delete an instrument to the watch list, i.e., change cost basis, quantity, notation, but not symbol. \seealso{Section~\ref{update}, page~\pageref{update}}Operation of this button is discussed below.  If the ``Tweet Adds \& Deletes'' check box is checked, the program tweets about the deletion to the user's Twitter account.  If checked, \tkw~will tweet adds and deletions to the user's Twitter account.
+  \item[Tweet Check Box] \index{Tweet Check Box}\index{Check Box, Tweet}  This check box determines whether \tkw~will tweet additions to and deletions from the watch list to the user's twitter account.  The box is checked---i.e., tweeting is enabled---by default.
+  \item[Quit Button] \index{Quit Button}\index{Button, Quit}  Clicking this button gracefully exits \tkw.  Since some clean-up is performed by the \seealso{\texttt{Utilities.getQuitButton()}}action-handler for this button, this is the preferred method of exiting \tkw.
+\end{description}
+
+\subsection{Exercising \tkw}\label{exercising}
+At this point, we assume that the user has successfully set up and started \tkw~through Section~\ref{start}.  At this point, the user interface should appear as in Figure~\ref{tkwgui}. 
+
+Before we exercise \tkw, consider the state of the database, the user's Twitter account, and the user's TradeKing watch list.  See Figures~\ref{emptydb}, \ref{emptytwitter}, and \ref{emptywatchlist}.
+\newpage
+\begin{figure}[hbt]
+\epsfxsize=3.6in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{emptydb.eps}}
+\end{center}
+\caption{Empty Database\label{emptydb}}
+\end{figure}
+\vfill
+\begin{figure}[hbt]
+\epsfxsize=3.6in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{notweets.eps}}
+\end{center}
+\caption{No Tweets From the User\label{emptytwitter}}
+\end{figure}
+\vfill
+\begin{figure}[hbt]
+\epsfxsize=3.6in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{emptywatchlist.eps}}
+\end{center}
+\caption{Empty Watch List\label{emptywatchlist}}
+\end{figure}
+\newpage
+Note that there are no entries into the database yet, that there are no tweets from the user's timeline yet, and that the TradeKing watch list has no instruments watched.  Now let's add, update, and delete some instruments.
+
+\subsubsection{Adding an Instrument}
+\index{Add an Instrument}
+\label{add}
+To add an instrument to the watch list, click the \texttt{Add} button shown in Figure~\ref{tkwgui}.  The interface now appears as in Figure~\ref{addgui}.  
+\begin{figure}[htb]
+\epsfxsize=3.5in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{add.eps}}
+\end{center}
+\caption{Interface for Adding an Instrument\label{addgui}}
+\end{figure}
+The purpose of the fields in Figure~\ref{addgui} should be obvious.  The user enters the instrument symbol, cost basis, quantity, and notation, then clicks the \texttt{Add} button.  For demonstration purposes, we enter the data in Table~\ref{testdata}.
+\begin{table}[htb]\centering
+\caption{Test Data\label{testdata}}
+\medskip
+\begin{tabular}{|c|r|r|l|}
+\hline
+{\it Symbol}  & {\it Cost Basis} & {\it Quantity} & {\it Notation} \\ \hline
+AAPL & 111.11 & 100 & First entry. \\ \hline
+FSLR & 222.22 & 200 & Second entry. \\ \hline
+GOOG & 333.33 & 300 & Third entry. \\ \hline
+IBM  & 444.44 & 400 & Fourth entry. \\ \hline
+\end{tabular}\end{table}
+
+After entry of the data in Table~\ref{testdata}, the database, the user's Twitter account, and the user's TradeKing watch list will look like Figures~\ref{fulldb}, \ref{fulltwitter}, and \ref{fullwatchlist}.
+\newpage
+\begin{figure}[hbt]
+\epsfxsize=3.3in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{fulldb.eps}}
+\end{center}
+\caption{Populated Database\label{fulldb}}
+\end{figure}
+\vfill
+\begin{figure}[hbt]
+\epsfxsize=3.3in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{fulltwitter.eps}}
+\end{center}
+\caption{Four Tweets From the User\label{fulltwitter}}
+\end{figure}
+\vfill
+\begin{figure}[hbt]
+\epsfxsize=3.3in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{fullwatchlist.eps}}
+\end{center}
+\caption{Populated Watch List\label{fullwatchlist}}
+\end{figure}
+\newpage
+Note that there are now four entries into the database, that there are four tweets in the user's timeline, and the TradeKing watch list now features the four instruments from Table~\ref{testdata}.
+
+\subsubsection{Updating an Instrument}
+\index{Update an Instrument}
+\label{update}
+To update an instrument in the watch list, first select the instrument to update by clicking its symbol in the \texttt{Symbol} window of Figure~\ref{tkwgui}, for example, IBM.  When you have selected it, make any changes you like in cost basis, quantity, or notation.  For example, notice the edits in Figure~\ref{updateIBM}.  
+\begin{figure}[hbt]
+\epsfxsize=3.5in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{ibmUpdateScreen.eps}}
+\end{center}
+\caption{Updates Made to the IBM Entry\label{updateIBM}}
+\end{figure}
+Then click the \texttt{Update} button. You will see this dialog. 
+\begin{figure}[hbt]
+%\epsfxsize=3.5in
+\epsfysize=.7in
+\begin{center}
+\mbox{\epsffile{databaseUpdate.eps}}
+\end{center}
+\caption{Database Update Option Dialog\label{databaseUpdate}}
+\end{figure}
+ Click \texttt{Yes} to effect the changes.  There is no \seealso{Section{confirm}, Page~\pageref{confirm}}confirmation dialog, but the database will now reflect the changes, as shown in Figure~\ref{newDatabase}.
+\begin{figure}[hbt]
+\epsfxsize=3.5in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{ibmRecordUpdated.eps}}
+\end{center}
+\caption{Database With Updated IBM Record\label{newDatabase}}
+\end{figure}
+
+The update operation does not make any tweets.  Moreover changes in cost basis and quantity are not apparent on the TradeKing watch list, because they are not displayed.  Changes to cost basis and quantity {\em are\/} reflected in the TradeKing watch list as displayed in the return from the TradeKing \texttt{user/watchlists get} API command.  (We omit the before and after displays of this command's results.)
+
+Note that you cannot edit the instrument symbol.  To change the symbol, you must delete the old and add the new.
+
+\subsubsection{Deleting an Instrument}
+\index{Delete an Instrument}
+\label{delete}
+To delete an instrument from the watch list, first select the instrument to delete by clicking its symbol in the \texttt{Symbol} window of Figure~\ref{tkwgui}, for example, IBM.  When you have selected it, click the \texttt{Delete} button. You will see this dialog.
+\vfill
+\begin{figure}[hbt]
+%\epsfxsize=3.5in
+\epsfysize=.7in
+\begin{center}
+\mbox{\epsffile{databaseDelete.eps}}
+\end{center}
+\caption{Database Delete Option Dialog\label{databaseDelete}}
+\end{figure}
+\vfill
+ Click \texttt{Yes} to effect the delete.  There is no confirmation dialog, but the database will now reflect the changes, as shown in Figure~\ref{newDeleteDatabase}.
+\vfill
+\begin{figure}[hbt]
+\epsfxsize=3.5in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{ibmRecordDeleted.eps}}
+\end{center}
+\caption{Database With IBM Record Deleted\label{newDeleteDatabase}}
+\end{figure}
+\vfill
+The delete operation tweets the symbol deleted to the user's Twitter account, as shown in Figure~\ref{ibmDeletedTweet}.
+\newpage
+\begin{figure}[hbt]
+\epsfxsize=3.5in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{ibmDeletedTweet.eps}}
+\end{center}
+\caption{Tweet About Deletion of IBM\label{ibmDeletedTweet}}
+\end{figure}
+The deleted instrument no longer appears in the user's TradeKing watch list, as shown in Figure~\ref{ibmDeletedFromTK}.
+\begin{figure}[hbt]
+\epsfxsize=3.5in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{ibmDeletedFromTK.eps}}
+\end{center}
+\caption{TradeKing Watch List No Longer Features IBM\label{ibmDeletedFromTK}}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\ 
+\newpage
+\section{Issues}
+\index{Issues}
+\tkw was prepared in a very short time as an entry into a programming contest.  We admit that this led us to cut corners in development.  Here we discuss some of the program's shortcomings.
+
+\subsection{Testing}
+\index{Testing}
+We did only a minimal amount of testing.  We did \seealso{\texttt{WatchlistItemTest.java}}unit testing\index{Unit Testing}\index{Testing, Unit} on only one Java class.  We did neither regression testing\index{Regression Testing}\index{Testing, Regression} nor \index{Stress Testing}\index{Testing, Stress}stress testing.  The only operational or acceptance testing\index{Acceptance Testing}\index{Testing, Acceptance} we did was in connection with producing the screen shots for this manual.  The biggest resulting weakness is that we don't know how the program will respond to bogus inputs.  What, for example, would happen if we tried to enter an non-existent symbol?  The database would accept it, and we would tweet the add to the world, but we don't know what would happen in the TradeKing account.
+
+We {\em did\/} uncover something interesting in the course of the testing we did though.  Under certain circumstances, additions to the TradeKing watch list made via \tkw~could not be deleted from the watch list on the TradeKing account web site.  They could only be deleted via \tkw.  We did not have time to explore this or duplicate the behavior.
+
+\subsection{Executable}
+\index{Executable}
+Currently \tkw~can be executed either in the \texttt{Eclipse} IDE or from the command line.  Neither is a particularly elegant method.  We tried packing \tkw's Java classes and resources into a Java jar file.  We kept running into class path issues.  Neither we nor our faculty advisors could figure out how to solve these problems before the contest deadline.
+
+\subsection{Default Watch List Only}
+\index{Default Watch List Only}
+\tkw~currently handles only the TradeKing default watch list.  Although it's not clear to us how one can create non-default watch lists from the TradeKing web site, \cite{tkreference} discusses named watch lists.  The Trade\-King API can be used to create and retrieve named watch lists.  Enhancing \tkw~to handle multiple watch lists is possible, but it would require much more complex database processing.
+
+Consider that one instrument could appear on many watch lists and one watch list could contain many instruments.  This many-to-many relationship would have to be normalized with a junction record.  Adds to and deletes from the database would have to take referential integrity into account.
+
+\subsection{Database}
+\index{Database}\index{Portability}
+\tkw~currently is hard coded to work only with a SQL Server database installation.  We thought it was necessary to store \tkw's data in a database for several reasons.  
+
+First, it's the right way.  It is {\em possible\/} to have \tkw~store and retrieve watch list data from a flat, text file or perhaps a set of nested Java hash tables.  But why?  This is what databases are for.  And besides, only database processing could efficiently handle named databases, as discussed above.
+
+Second, we believe this is the way self-directed, technically proficient TradeKing account holders would want. 
+
+Third, portability is minimally compromised by having all database-specific code in \seealso{\texttt{Database.java}}\texttt{Database.java}.  This file and, of course, \seealso{\texttt{database.properties}}\texttt{database.properties} are the only files that would have to be modified to handle another database.
+
+Fourth, other databases are available.  Our faculty advisor recommends that any further development of \tkw~include alteration to use Apache \index{Apache Derby}\index{Derby}Derby.\cite{derby}.  Derby is a Java-based relational database that can be embedded in a Java application.  Embedding the database in the application means that the user would not have to install, configure, or manage the database.
+
+\subsection{XML}
+\index{XML}
+The TradeKing API accepts requests and returns results formatted as XML.  Some of our \seealso{\texttt{Utilities.java}}code handles API results by parsing the XML text into DOM documents.  Our code should also use XML processing to cast the body of the \texttt{user/watchlists update} API command.  Right now we rely on less robust \seealso{\texttt{Watchlist.java}}string-handling. 
+
+\subsection{To-Do List}
+\index{To-Do List}\index{Apache Derby}\index{Derby}
+\label{confirm}
+There are several loose ends in the code.  Some have already been mentioned.  All are marked in the source code with \texttt{TODO} comments.  Here they are.
+\begin{enumerate}
+  \item \texttt{Database.java}: SQL Server specific code is non-portable; consider embedding a Derby database.
+  \item \texttt{Tkwatch.java}: Windows OS look and feel is hard-coded; consider selecting OS-appropriate look and feel at run-time.
+  \item \texttt{Utilities.java}: Each panel has a message line, currently used only for the \texttt{Twitter4J} banner; consider displaying non-critical status information, such as confirmations.\nocite{murach}
+  \item \texttt{Watchlist.java}, \texttt{WatchlistItem.java}: Use XML handling where appropriate.
+  \item \texttt{WatchlistPanel.java} Add button currently opens a new window for add; use a panel in the main frame instead.
+  \item \texttt{WatchlistPanel.java}: Deleting all instruments leaves the last instrument's data in cost basis, quantity and notation fields; clean up after delete.
+\end{enumerate}
+
+\newpage
+\section{About Us}
+\index{Authors}
+Paul Kelly, Paul Donovan and Michael Radovich met the first day of freshman year at Loyola University Maryland and have been roommates ever since.  They quickly realized they shared a common interest in financial markets, technology, and entrepreneurship and have worked together on a number of projects while in school, both in the classroom and out.  When not working on their next project they can often be found playing sports or arguing over sports teams they support.  Working together on \tkw~was both enjoyable and rewarding for them, and above all, a learning experience. 
+\subsection{Paul Donovan}
+\index{Donovan, Paul}
+\begin{figure}[hbt]
+\epsfxsize=2.8in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{donovanNew.eps}}
+\end{center}
+\caption{Paul Donovan, \texttt{pjdonovan@loyola.edu}}
+\end{figure}
+Paul J.~Donovan is a current senior at Loyola University Maryland.  He is a finance major within the Sellinger School of Business and Management and the Vice President of Loyola’s Financial Management Association.  For the past two summers he has interned at a private equity firm and an institutional money management firm, both in Boston.  In his spare time he enjoys investing, reading, soccer, football, and the outdoors.  When not at school he resides in Westwood, Massachusetts, with his parents, three siblings, and two black Labrador retrievers. 
+\newpage
+\subsection{Paul Kelly}
+\index{Kelly, Paul}
+\begin{figure}[hbt]
+\epsfxsize=2.8in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{kellyNew.eps}}
+\end{center}
+\caption{Paul Kelly, \texttt{pjkelly@loyola.edu}}
+\end{figure}
+Paul J.~Kelly is a current senior at Loyola University Maryland.  He is a marketing major and information systems minor within the Sellinger School of Business and Management.  He currently works for Howard County Maryland, doing marketing research in an attempt to better the community and drive the local economy.  In his spare time he enjoys cooking, baseball, board games, fantasy sports, and music.  When not at school he resides in Westport, Connecticut, with his mother, three brothers, and his boxer, Molly. 
+\newpage
+\subsection{Michael Radovich}
+\index{Radovich, Michael}
+\begin{figure}[hbt]
+\epsfxsize=2.8in
+%\epsfysize=3.5in
+\begin{center}
+\mbox{\epsffile{radovichNew.eps}}
+\end{center}
+\caption{Mike Radovich, \texttt{maradovich@loyola.edu}}
+\end{figure}
+Michael A.~Radovich is a current senior at Loyola University Maryland.  He is a finance major within the Sellinger School of Business and Management and a member of Loyola’s Financial Management Association.  For the past two summers he handled a variety of roles for a large beverage distributor in New York, working within their sales, marketing, and distribution departments.  He currently writes investment articles for \url{MarketNewsVideo.Com} and \url{ETFChannel.Com}.  In his spare time he enjoys traveling, soccer, hockey, and investing.  When not at school he resides in Seaford, New York, with his parents, sister, and beloved Bichon Frise, Sophie.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\label{refs}
+\bibliography{tkw}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\label{index}
+\printindex
+
+\end{document}

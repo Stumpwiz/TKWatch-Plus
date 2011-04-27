@@ -1,0 +1,141 @@
+\begin{thebibliography}{10}
+
+\bibitem{xerces}
+{A}pache.
+\newblock {T}he {A}pache {X}erces project.
+\newblock \url{http://xerces.apache.org/}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{codec}
+{Apache {C}ommons}.
+\newblock {c}ommons {c}codec.
+\newblock \url{http://commons.apache.org/codec/}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{derby}
+{{A}pache {DB} {P}roject}.
+\newblock Apache {D}erby.
+\newblock \url{http://db.apache.org/derby/}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{junit}
+Kent Beck.
+\newblock {j}unit.
+\newblock \url{http://kentbeck.github.com/junit/}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{eclipse}
+{Eclipse Foundation}.
+\newblock Explore the eclipse universe.
+\newblock \url{http://www.eclipse.org/}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{junitorg}
+{JU}nit.org.
+\newblock Resources for test driven development.
+\newblock \url{http://junit.org/}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{lamport}
+Leslie Lamport.
+\newblock {\em {\LaTeX}: {A} Document Preparation System}.
+\newblock Addison-Wesley Publishing Company, Reading MA, 1986.
+
+\bibitem{makice}
+Kelvin Makice.
+\newblock {\em Twitter {API}: Up and Running}.
+\newblock Apress, Berkeley CA, 2006.
+
+\bibitem{msjdbc}
+{{M}icrosoft {D}ownload {C}enter}.
+\newblock {M}icrosoft {SQL} {S}erver 2005 {JDBC} {D}river 1.2.
+\newblock
+  \url{http://www.microsoft.com/downloads/en/details.aspx?FamilyID=c47053eb-3b%
+64-4794-950d-81e1ec91c1ba}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{murach}
+Joel Murach and Andrea Steelman.
+\newblock {\em Murach's {J}ava {SE} 6}.
+\newblock Mike Murach \& Associates, Inc., Fresno CA, 2007.
+
+\bibitem{java}
+{Oracle Technology Network}.
+\newblock Java.
+\newblock \url{http://www.oracle.com/technetwork/java/index.html}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{pctex}
+{{P}ersonal \TeX, {I}nc.}
+\newblock {{PC}\TeX {T}he {I}ntegrated \LaTeX {E}nvironment}.
+\newblock \url{http://www.pctex.com/}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{latexproject}
+{\LaTeX {P}roject}.
+\newblock {\LaTeX---{A} Document Preparation System}.
+\newblock \url{http://www.latex-project.org/}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{github}
+Michael Radovich.
+\newblock Github repository.
+\newblock \url{https://github.com/maradovich/TKWatch-Plus}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{tkfaq}
+Trade{K}ing.
+\newblock Factsheets.
+\newblock \url{http://www.tradeking.com/p/home/tradeking/about/facts.tmpl}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{tkforum}
+Trade{K}ing.
+\newblock Selective-{B}eta: {G}etting {S}tarted!
+\newblock
+  \url{http://community.tradeking.com/groups/tradeking-api/forum/topics/6415-s%
+elective-beta-getting-started/forum_posts}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{tkreference}
+Trade{K}ing.
+\newblock Trade{K}ing {API} {R}eference {G}uide.
+\newblock Available as a {PDF} on request to {T}rade{K}ing, after signing a
+  terms-of-use agreement., March 2011.
+
+\bibitem{twitterapi}
+{Twitter {D}evelopers}.
+\newblock {API} {D}ocumentation.
+\newblock \url{https://dev.twitter.com/doc}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{twitterapps}
+{Twitter {D}evelopers}.
+\newblock Twitter applications.
+\newblock \url{https://dev.twitter.com/apps}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{vohra06}
+Ajay Vohra and Deepak Vohra.
+\newblock {\em Pro XML Development with Java Technology}.
+\newblock O'Reilley Media, Inc., Sebastopol CA, 2009.
+
+\bibitem{swing}
+Wikipedia.
+\newblock Swing ({J}ava).
+\newblock \url{http://en.wikipedia.org/wiki/Swing_(Java)}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{williams}
+Graham Williams.
+\newblock {The \TeX catalog online}.
+\newblock \url{http://mirror.unl.edu/ctan/help/Catalogue/entries/refman.html}.
+\newblock Online, accessed April, 2011.
+
+\bibitem{yamamoto}
+Yusuke Yamamoto.
+\newblock Twitter4j.
+\newblock \url{http://twitter4j.org/en/index.html}.
+\newblock Online, accessed April, 2011.
+
+\end{thebibliography}

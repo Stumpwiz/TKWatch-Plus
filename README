@@ -1,0 +1,20 @@
+Contents of this folder:
+
+Reference Guide:
+   Source: the source used to produce the reference guide.
+   Reference Guide.PDF: The guide to installation, set-up, and
+      operation of the TKWatch+ program.
+
+Javadocs:
+   Standard Java source code documentation for the source code;
+      double-click on "index.html."
+
+Source Code
+   tkwatch: The Java package that contains the Java source files.
+   Various resources: The properties and graphics files.
+
+Executable
+   tkwatch: The Java package that contains the Java class files.
+   Various resources: The properties and graphics files.  Start
+      TKWatch+ from the command line by changing directory into
+      this directory and typing the command java tkwatch.Tkwatch.
