@@ -4,6 +4,37 @@
 	typesetmode: DVI
 	spellwordlist: american
 referenceGuide.tex
-	wndpos: 3 -1 -1 -8 -28 0 0 739 612
+	wndpos: 1 -1 -1 -8 -28 46 46 1427 678
+	zorder: 1
+	edit: 1735
+referenceGuide.aux
+tkwatchplus.eps
+referenceGuide.toc
+dbUserServerRoles.eps
+databaseInit.eps
+initialized.eps
+tkwgui.eps
+emptydb.eps
+notweets.eps
+emptywatchlist.eps
+add.eps
+fulldb.eps
+fulltwitter.eps
+fullwatchlist.eps
+ibmUpdateScreen.eps
+databaseUpdate.eps
+ibmRecordUpdated.eps
+databaseDelete.eps
+ibmRecordDeleted.eps
+ibmDeletedTweet.eps
+ibmDeletedFromTK.eps
+donovanNew.eps
+kellyNew.eps
+radovichNew.eps
+referenceGuide.bbl
+referenceGuide.ind
+referenceGuide.log
+referenceGuide.DVI
+	wndpos: 3 -1 -1 -8 -28 69 69 1446 697
 	zorder: 0
-	edit: 12701
+	view: 0 90
