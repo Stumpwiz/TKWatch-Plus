@@ -1,4 +1,4 @@
-This is pdfeTeXk, Version 3.141592-1.20a-2.2 (Web2c 7.5.3) (format=latex 2010.7.6)  30 APR 2011 09:15
+This is pdfeTeXk, Version 3.141592-1.20a-2.2 (Web2c 7.5.3) (format=latex 2010.7.6)  30 APR 2011 09:53
  Source specials enabled.
  %&-line parsing enabled.
 **&latex referenceGuide.tex
@@ -31,7 +31,7 @@ Package: makeidx 2000/03/29 v1.0m Standard LaTeX package
 (c:/Program Files (x86)/PCTeX/PCTeXv6/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
-(c:/Program Files (x86)/PCTeX/PCTeXv6/texmf-pti/tex/tex/legacy/epsf.sty
+(c:/PROGRA~2/PCTeX/PCTeXv6/texmf-pti/tex/tex/legacy/epsf.sty
 This is `epsf.tex' v2.7 <25 October 1996>
 \epsffilein=\read1
 \epsfframemargin=\dimen107
@@ -152,7 +152,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 93--99
 ]) (./referenceGuide.aux) ) 
 Here is how much of TeX's memory you used:
  597 strings out of 95375
- 7230 string characters out of 1187511
+ 7195 string characters out of 1187511
  1048718 words of memory out of 2500000
  3589 multiletter control sequences out of 10000+50000
  9477 words of font info for 35 fonts, out of 1000000 for 2000
